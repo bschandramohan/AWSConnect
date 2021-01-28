@@ -1,0 +1,109 @@
+{
+  "Item": {
+    "weeklySchedule": {
+      "M": {
+        "Tuesday": {
+          "L": [
+            {
+              "M": {
+                "officeLocation": {
+                  "S": "Cupertino, CA"
+                },
+                "startTime": {
+                  "S": "09:00"
+                },
+                "endTime": {
+                  "S": "17:00"
+                }
+              }
+            }
+          ]
+        },
+        "Monday": {
+          "L": [
+            {
+              "M": {
+                "officeLocation": {
+                  "S": "Mountain View, CA"
+                },
+                "startTime": {
+                  "S": "09:00"
+                },
+                "endTime": {
+                  "S": "17:00"
+                }
+              }
+            },
+            {
+              "M": {
+                "officeLocation": {
+                  "S": "Cupertino, CA"
+                },
+                "startTime": {
+                  "S": "09:00"
+                },
+                "endTime": {
+                  "S": "17:00"
+                }
+              }
+            }
+          ]
+        },
+        "Thursday": {
+          "L": [
+            {
+              "M": {
+                "officeLocation": {
+                  "S": "Mountain View, CA"
+                },
+                "startTime": {
+                  "S": "09:00"
+                },
+                "endTime": {
+                  "S": "17:00"
+                }
+              }
+            }
+          ]
+        },
+        "Friday": {
+          "L": [
+            {
+              "M": {
+                "officeLocation": {
+                  "S": "Mountain View, CA"
+                },
+                "startTime": {
+                  "S": "09:00"
+                },
+                "endTime": {
+                  "S": "16:30"
+                }
+              }
+            }
+          ]
+        },
+        "Wednesday": {
+          "L": [
+            {
+              "M": {
+                "officeLocation": {
+                  "S": "Cupertino, CA"
+                },
+                "startTime": {
+                  "S": "09:00"
+                },
+                "endTime": {
+                  "S": "12:00"
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    "userId": {
+      "N": "105"
+    }
+  }
+}

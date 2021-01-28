@@ -1,0 +1,30 @@
+{
+  "UserId": 0,
+  "weeklySchedule": {
+    "Monday": {
+      "startTime": "09:00",
+      "endTime": "17:00",
+      "officeLocation": "Mountain View, CA"
+    },
+    "Tuesday": {
+      "startTime": "09:00",
+      "endTime": "17:00",
+      "officeLocation": "Cupertino, CA"
+    },
+    "Wednesday": {
+      "startTime": "09:00",
+      "endTime": "12:00",
+      "officeLocation": "Cupertino, CA"
+    },
+    "Thursday": {
+      "startTime": "09:00",
+      "endTime": "17:00",
+      "officeLocation": "Mountain View, CA"
+    },
+    "Friday": {
+      "startTime": "09:00",
+      "endTime": "16:30",
+      "officeLocation": "Mountain View, CA"
+    }
+  }
+}
