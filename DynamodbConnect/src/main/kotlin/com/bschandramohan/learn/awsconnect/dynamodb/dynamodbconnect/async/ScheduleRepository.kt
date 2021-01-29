@@ -1,5 +1,6 @@
 package com.bschandramohan.learn.awsconnect.dynamodb.dynamodbconnect.async
 
+import com.bschandramohan.learn.awsconnect.dynamodb.dynamodbconnect.aop.TimeIt
 import com.bschandramohan.learn.awsconnect.dynamodb.dynamodbconnect.domain.Schedule
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Repository
@@ -15,6 +16,7 @@ class ScheduleRepository(dynamoClient: DynamoDbEnhancedAsyncClient) {
 
     private val table = dynamoClient.table("Schedule", tableSchema)
 
+    @TimeIt
     fun save(schedule: Schedule): Mono<Unit> {
         val itemFuture = table.putItem(schedule)
 
@@ -23,6 +25,7 @@ class ScheduleRepository(dynamoClient: DynamoDbEnhancedAsyncClient) {
             .doOnError { logger.error("Exception saving schedule - $it") }
     }
 
+    @TimeIt
     fun get(userId: Long): Mono<Schedule> {
         val key = Key.builder().partitionValue(userId).build()
         val itemFuture = table.getItem(key)

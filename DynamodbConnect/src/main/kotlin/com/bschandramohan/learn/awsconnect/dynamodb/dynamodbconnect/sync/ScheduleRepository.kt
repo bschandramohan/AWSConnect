@@ -1,5 +1,6 @@
 package com.bschandramohan.learn.awsconnect.dynamodb.dynamodbconnect.sync
 
+import com.bschandramohan.learn.awsconnect.dynamodb.dynamodbconnect.aop.TimeIt
 import com.bschandramohan.learn.awsconnect.dynamodb.dynamodbconnect.domain.Schedule
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Repository
@@ -13,11 +14,13 @@ class ScheduleRepository(dynamodbSyncClient: DynamoDbEnhancedClient) {
 
     private val table = dynamodbSyncClient.table("Schedule", tableSchema)
 
+    @TimeIt
     fun save(schedule: Schedule) {
         table.putItem(schedule)
         logger.info("Saved schedule for user=${schedule.userId}")
     }
 
+    @TimeIt
     fun get(userId: Long): Schedule? {
         val key = Key.builder().partitionValue(userId).build()
         return table.getItem(key)

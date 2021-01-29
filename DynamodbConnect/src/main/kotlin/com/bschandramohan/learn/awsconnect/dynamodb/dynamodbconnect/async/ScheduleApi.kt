@@ -1,5 +1,6 @@
 package com.bschandramohan.learn.awsconnect.dynamodb.dynamodbconnect.async
 
+import com.bschandramohan.learn.awsconnect.dynamodb.dynamodbconnect.aop.TimeIt
 import com.bschandramohan.learn.awsconnect.dynamodb.dynamodbconnect.domain.Schedule
 import com.bschandramohan.learn.awsconnect.dynamodb.dynamodbconnect.error.ApiServerError
 import org.slf4j.LoggerFactory
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.*
 class ScheduleApi(var scheduleService: ScheduleService) {
     private val logger = LoggerFactory.getLogger(ScheduleApi::class.java)
 
+    @TimeIt
     @PostMapping("/")
     fun create(@RequestBody schedule: Schedule): ResponseEntity<Any> {
         return try {
@@ -22,6 +24,7 @@ class ScheduleApi(var scheduleService: ScheduleService) {
         }
     }
 
+    @TimeIt
     @GetMapping("/{id}")
     fun get(@PathVariable id: Long): ResponseEntity<Any> {
         return try {
