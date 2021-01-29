@@ -5,6 +5,7 @@ import com.bschandramohan.learn.awsconnect.dynamodb.dynamodbconnect.domain.Sched
 import com.bschandramohan.learn.awsconnect.dynamodb.dynamodbconnect.util.getMonoResult
 import com.bschandramohan.learn.awsconnect.dynamodb.dynamodbconnect.util.postMonoResult
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 import org.slf4j.LoggerFactory
 import org.springframework.boot.test.context.SpringBootTest
 import java.util.concurrent.ThreadLocalRandom
@@ -35,5 +36,13 @@ class ScheduleSyncTest {
 
         val schedule = getMonoResult("sync/schedule/${addSchedule.userId}", Schedule::class.java)
         logger.info(schedule.toString())
+    }
+
+    @Test
+    fun getSchedule_withNotCreated_throwsException() {
+        val exception = assertThrows<Exception>("NOT Found error") {
+            getMonoResult("sync/schedule/1", Schedule::class.java)
+        }
+        logger.info("Thrown Exception=$exception")
     }
 }
