@@ -30,10 +30,10 @@ class ScheduleAsyncTest {
     @Test
     fun saveAndGetSchedule_withCorrectInputs_savesSuccessfully() {
         val addSchedule = sampleSchedule()
-        val response = postMonoResult("async/schedule/", addSchedule, Schedule::class.java)
+        val response = postMonoResult("async/schedule/", addSchedule)
         logger.info(response.toString())
 
-        val schedule = getMonoResult("async/schedule/${addSchedule.userId}", Schedule::class.java)
-        logger.info(schedule.toString())
+        val schedule: Schedule? = getMonoResult("async/schedule/${addSchedule.userId}")
+        logger.info(schedule?.toString())
     }
 }

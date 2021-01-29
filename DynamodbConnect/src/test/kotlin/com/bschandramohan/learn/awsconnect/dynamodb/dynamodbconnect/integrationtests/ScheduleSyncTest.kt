@@ -31,17 +31,21 @@ class ScheduleSyncTest {
     @Test
     fun saveAndGetSchedule_withCorrectInputs_savesSuccessfully() {
         val addSchedule = sampleSchedule()
-        val response = postMonoResult("sync/schedule/", addSchedule, Schedule::class.java)
+        val response = postMonoResult("sync/schedule/", addSchedule)
         logger.info(response.toString())
 
-        val schedule = getMonoResult("sync/schedule/${addSchedule.userId}", Schedule::class.java)
+        val schedule: Schedule? = getMonoResult("sync/schedule/${addSchedule.userId}")
         logger.info(schedule.toString())
     }
 
     @Test
     fun getSchedule_withNotCreated_throwsException() {
         val exception = assertThrows<Exception>("NOT Found error") {
-            getMonoResult("sync/schedule/1", Schedule::class.java)
+            // Return value isn't required for our method. So we could just pass the type next to the calling
+            // method name
+            //val schedule: Schedule? = getMonoResult("sync/schedule/1")
+
+            getMonoResult<Schedule?>("sync/schedule/1")
         }
         logger.info("Thrown Exception=$exception")
     }

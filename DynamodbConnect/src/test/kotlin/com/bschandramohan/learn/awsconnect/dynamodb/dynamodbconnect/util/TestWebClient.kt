@@ -8,36 +8,36 @@ import org.springframework.web.reactive.function.client.WebClient
 import reactor.core.publisher.Mono
 import java.time.Duration
 
-private val client = WebClient.create("http://localhost:8080/")
+val client = WebClient.create("http://localhost:8080/")
 
 class TestWebClient
 
 private val logger = LoggerFactory.getLogger(TestWebClient::class.java)
 
-fun <T> getMonoResult(uriParam: String, clazz: Class<T>): T? = client
+inline fun <reified T> getMonoResult(uriParam: String): T? = client
     .get()
     .uri(uriParam)
     .retrieve()
     .onStatus(HttpStatus::isError, ::renderErrorResponse)
-    .bodyToMono(clazz)
+    .bodyToMono(T::class.java)
     .block(Duration.ofSeconds(1))
 
-fun <T> getFluxResult(uriParam: String, clazz: Class<T>): MutableList<T>? = client
+inline fun <reified T> getFluxResult(uriParam: String): MutableList<T>? = client
     .get()
     .uri(uriParam)
     .retrieve()
     .onStatus(HttpStatus::isError, ::renderErrorResponse)
-    .bodyToFlux(clazz)
+    .bodyToFlux(T::class.java)
     .collectList()      // Ref: https://www.programcreek.com/java-api-examples/?api=org.springframework.web.reactive.function.client.WebClient
     .block(Duration.ofSeconds(1))
 
-fun <T> postMonoResult(uriParam: String, dataToPost: T, clazz: Class<T>): T? = client
+inline fun <reified T> postMonoResult(uriParam: String, dataToPost: T): T? = client
     .post()
     .uri(uriParam)
     .body(BodyInserters.fromValue(dataToPost))
     .retrieve()
     .onStatus(HttpStatus::isError, ::renderErrorResponse)
-    .bodyToMono(clazz)
+    .bodyToMono(T::class.java)
     .block(Duration.ofSeconds(1))
 
 fun renderErrorResponse(clientResponse: ClientResponse): Mono<Throwable> {
