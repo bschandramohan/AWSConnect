@@ -20,6 +20,10 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 
+    // Only required for Coroutine Flow way of handling requests
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor")
+    implementation("io.projectreactor.kotlin:reactor-kotlin-extensions")
+
     // Instead of using V1 SDK (com.amazonaws*), we will be using V2 (software.amazon.awssdk*)
     // implementation("com.amazonaws:aws-java-sdk-dynamodb")
     implementation(platform("software.amazon.awssdk:bom:2.15.22"))
