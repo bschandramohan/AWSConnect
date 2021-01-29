@@ -1,4 +1,4 @@
-package com.bschandramohan.learn.awsconnect.dynamodb.dynamodbconnect.async
+package com.bschandramohan.learn.awsconnect.dynamodb.dynamodbconnect.service.async
 
 import com.bschandramohan.learn.awsconnect.dynamodb.dynamodbconnect.aop.TimeIt
 import com.bschandramohan.learn.awsconnect.dynamodb.dynamodbconnect.domain.Schedule
