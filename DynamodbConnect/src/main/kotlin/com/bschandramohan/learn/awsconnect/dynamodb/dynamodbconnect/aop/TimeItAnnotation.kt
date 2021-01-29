@@ -30,7 +30,6 @@ class TimeItAnnotationAspect {
             } catch (e: Exception) { // ignore
             }
         }
-        //logger.info("Method $proceedingJoinPoint completed execution in $time ms")
         logger.info("Invoked Method=${proceedingJoinPoint.signature.declaringTypeName}.${proceedingJoinPoint.signature.name} timeTaken=$time ms")
         return retValue
     }
