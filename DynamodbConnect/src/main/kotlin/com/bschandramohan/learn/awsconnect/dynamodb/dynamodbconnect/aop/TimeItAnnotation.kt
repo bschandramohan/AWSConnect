@@ -18,11 +18,17 @@ class TimeItAnnotationAspect {
     var logger: Logger = LoggerFactory.getLogger(TimeItAnnotationAspect::class.java)
 
     @Around("@annotation(com.bschandramohan.learn.awsconnect.dynamodb.dynamodbconnect.aop.TimeIt)")
-    fun calculateTimeTaken(proceedingJoinPoint: ProceedingJoinPoint): Any {
-        logger.info("Started execution of $proceedingJoinPoint with arguments: ${proceedingJoinPoint.args}")
-        val retValue: Any
+    @Throws(Throwable::class)
+    fun calculateTimeTaken(proceedingJoinPoint: ProceedingJoinPoint): Any? {
+        val arguments = StringBuilder()
+        proceedingJoinPoint.args.forEach { arguments.append(it).append("\n") }
+        logger.info("Started execution of $proceedingJoinPoint with arguments: $arguments")
+        var retValue: Any? = null
         val time = measureTimeMillis {
-            retValue = proceedingJoinPoint.proceed()
+            try {
+                retValue = proceedingJoinPoint.proceed()
+            } catch (e: Exception) { // ignore
+            }
         }
         //logger.info("Method $proceedingJoinPoint completed execution in $time ms")
         logger.info("Invoked Method=${proceedingJoinPoint.signature.declaringTypeName}.${proceedingJoinPoint.signature.name} timeTaken=$time ms")
