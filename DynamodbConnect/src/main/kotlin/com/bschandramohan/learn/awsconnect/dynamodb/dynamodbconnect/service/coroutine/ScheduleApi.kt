@@ -35,8 +35,8 @@ class ScheduleApi(var scheduleService: ScheduleService) {
     }
 
     @TimeIt
-    @GetMapping("/")
-    suspend fun getAll(): ResponseEntity<Any> {
+    @GetMapping("/getall")
+    suspend fun getAllAsList(): ResponseEntity<Any> {
         return try {
             val schedulesList = mutableListOf<Schedule>()
 
@@ -47,6 +47,16 @@ class ScheduleApi(var scheduleService: ScheduleService) {
             schedulesList.forEach { logger.info(it.toString()) }
 
             ResponseEntity.ok(schedulesList)
+        } catch (e: Exception) {
+            ApiServerError(entityName, "getAllAsList", e)
+        }
+    }
+
+    @TimeIt
+    @GetMapping("/")
+    suspend fun getAll(): ResponseEntity<Any> {
+        return try {
+            ResponseEntity.ok(scheduleService.getAll())
         } catch (e: Exception) {
             ApiServerError(entityName, "getAll", e)
         }

@@ -58,4 +58,16 @@ class ScheduleFlowTest {
         schedulesList.forEachIndexed { index, schedule -> logger.info("User=[$index] Schedule=$schedule") }
         assert(schedulesList.isNotEmpty())
     }
+
+    @Test
+    fun getAllNew() = runBlocking {
+        val addSchedule = sampleSchedule()
+        val createResponse = postFlowResult("flow/schedule/", addSchedule)
+        require(createResponse == null) { "Saving schedule shouldn't return an object" }
+
+        val schedulesList = getFlowResults<Any>("flow/schedule/getall")
+
+        schedulesList.forEachIndexed { index, schedule -> logger.info("User=[$index] Schedule=$schedule") }
+        assert(schedulesList.isNotEmpty())
+    }
 }
