@@ -1,8 +1,12 @@
 package com.bschandramohan.learn.awsconnect.dynamodb.dynamodbconnect.util
 
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.runBlocking
+import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
+import org.springframework.http.MediaType
 import org.springframework.web.reactive.function.BodyInserters
 import org.springframework.web.reactive.function.client.ClientResponse
 import org.springframework.web.reactive.function.client.WebClient
@@ -14,7 +18,7 @@ val client = WebClient.create("http://localhost:8080/")
 
 class TestWebClient
 
-private val logger = LoggerFactory.getLogger(TestWebClient::class.java)
+val logger: Logger = LoggerFactory.getLogger(TestWebClient::class.java)
 
 inline fun <reified T> getMonoResult(uriParam: String): T? = client
     .get()
@@ -64,13 +68,43 @@ suspend inline fun <reified T: Any> postFlowResult(uriParam: String, dataToPost:
     .firstOrNull()
 
 
-suspend inline fun <reified T: Any> getFlowResult(uriParam: String): T? = client
+suspend inline fun <reified T : Any> getFlowResult(uriParam: String): T? = client
     .get()
     .uri(uriParam)
+    .accept(MediaType.APPLICATION_JSON)
     .retrieve()
     .onStatus(HttpStatus::isError, ::renderErrorResponse)
     .bodyToFlow<T>()
     .firstOrNull()
+
+inline fun <reified T : Any> getFlowResults(uriParam: String): List<T?> = runBlocking {
+    val itemList = mutableListOf<T>()
+    // Commented code with prints to show that the actual service call is made only at collect() and not at retrieve or bodyToFlow steps
+//    client
+//        .get()
+//        .uri(uriParam)
+//        .accept(MediaType.APPLICATION_JSON)
+//        .also { logger.info("Before retrieving") }
+//        .retrieve()
+//        .also { logger.info("After retrieving") }
+//        .onStatus(HttpStatus::isError, ::renderErrorResponse)
+//        .also { logger.info("before bodyToFlow conversion") }
+//        .bodyToFlow<T>()
+//        .also { logger.info("After bodyToFlow conversion") }
+//        .collect { item -> itemList.add(item)}
+//        .also { logger.info("After collection") }
+
+    client
+        .get()
+        .uri(uriParam)
+        .accept(MediaType.APPLICATION_JSON)
+        .retrieve()
+        .onStatus(HttpStatus::isError, ::renderErrorResponse)
+        .bodyToFlow<T>()
+        .collect { item -> itemList.add(item) }
+
+    return@runBlocking itemList
+}
 
 fun renderErrorResponse(clientResponse: ClientResponse): Mono<Throwable> {
     logger.error("Error on call. StatusCode=${clientResponse.statusCode()}")
