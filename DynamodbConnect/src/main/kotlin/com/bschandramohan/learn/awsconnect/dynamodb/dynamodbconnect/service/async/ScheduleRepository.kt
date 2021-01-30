@@ -32,11 +32,6 @@ class ScheduleRepository(dynamoClient: DynamoDbEnhancedAsyncClient) {
         return Mono.fromFuture(itemFuture)
             .doOnError { logger.error("Exception fetching schedule for user=$userId - $it") }
     }
-//
-//    fun getAll(): Flux<Schedule> {
-//        val itemPage = table.scan()
-//        itemPage.
-//    }
 
     companion object {
         private val tableSchema = TableSchema.fromBean(Schedule::class.java)

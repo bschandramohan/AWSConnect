@@ -9,6 +9,7 @@ import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Test
 import org.slf4j.LoggerFactory
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.http.MediaType
 import java.util.concurrent.ThreadLocalRandom
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -60,12 +61,24 @@ class ScheduleFlowTest {
     }
 
     @Test
-    fun getAllList() = runBlocking {
+    fun getAllSchedulesAsList_withAtLeastOneSchedule_returnsAllSchedules() = runBlocking {
         val addSchedule = sampleSchedule()
         val createResponse = postFlowResult("flow/schedule/", addSchedule)
         require(createResponse == null) { "Saving schedule shouldn't return an object" }
 
-        val schedulesList = getFlowResults<Any>("flow/schedule/getall")
+        val schedulesList = getFlowResults<Any>("flow/schedule/getAllAsList", MediaType.APPLICATION_JSON)
+
+        schedulesList.forEachIndexed { index, schedule -> logger.info("User=[$index] Schedule=$schedule") }
+        assert(schedulesList.isNotEmpty())
+    }
+
+    @Test
+    fun getAllSchedulesAsJson_withAtLeastOneSchedule_returnsAllSchedules() = runBlocking {
+        val addSchedule = sampleSchedule()
+        val createResponse = postFlowResult("flow/schedule/", addSchedule)
+        require(createResponse == null) { "Saving schedule shouldn't return an object" }
+
+        val schedulesList = getFlowResults<Any>("flow/schedule/getAllAsJson", MediaType.APPLICATION_JSON)
 
         schedulesList.forEachIndexed { index, schedule -> logger.info("User=[$index] Schedule=$schedule") }
         assert(schedulesList.isNotEmpty())

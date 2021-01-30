@@ -6,6 +6,7 @@ import com.bschandramohan.learn.awsconnect.dynamodb.dynamodbconnect.error.ApiSer
 import kotlinx.coroutines.flow.collect
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
+import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
@@ -35,7 +36,35 @@ class ScheduleApi(var scheduleService: ScheduleService) {
     }
 
     @TimeIt
-    @GetMapping("/getall")
+    @GetMapping("/{id}", produces = [MediaType.APPLICATION_NDJSON_VALUE])
+    suspend fun get(@PathVariable id: Long): ResponseEntity<Any> {
+        return try {
+            val schedule = scheduleService.get(id)
+
+            // Test code to print the list
+            // schedule.collect { item -> logger.info("item=$item") }
+
+            ResponseEntity.ok(schedule)
+        } catch (e: Exception) {
+            logger.error("Error getting schedule", e)
+            ApiServerError(entityName, "get", e)
+        }
+    }
+
+    @TimeIt
+    @GetMapping("/", produces = [MediaType.APPLICATION_NDJSON_VALUE])
+    suspend fun getAll(): ResponseEntity<Any> {
+        return try {
+            ResponseEntity.ok(scheduleService.getAll())
+        } catch (e: Exception) {
+            ApiServerError(entityName, "getAll", e)
+        }
+    }
+
+    // ADDITIONAL METHODS
+    // Demonstrates different ways of passing the get all results
+    @TimeIt
+    @GetMapping("getAllAsList")
     suspend fun getAllAsList(): ResponseEntity<Any> {
         return try {
             val schedulesList = mutableListOf<Schedule>()
@@ -53,28 +82,12 @@ class ScheduleApi(var scheduleService: ScheduleService) {
     }
 
     @TimeIt
-    @GetMapping("/")
-    suspend fun getAll(): ResponseEntity<Any> {
+    @GetMapping("getAllAsJson")
+    suspend fun getAllAsJson(): ResponseEntity<Any> {
         return try {
             ResponseEntity.ok(scheduleService.getAll())
         } catch (e: Exception) {
-            ApiServerError(entityName, "getAll", e)
-        }
-    }
-
-    @TimeIt
-    @GetMapping("/{id}")
-    suspend fun get(@PathVariable id: Long): ResponseEntity<Any> {
-        return try {
-            val schedule = scheduleService.get(id)
-
-            // Test code to print the list
-            // schedule.collect { item -> logger.info("item=$item") }
-
-            ResponseEntity.ok(schedule)
-        } catch (e: Exception) {
-            logger.error("Error getting schedule", e)
-            ApiServerError(entityName, "get", e)
+            ApiServerError(entityName, "getAllAsJson", e)
         }
     }
 }

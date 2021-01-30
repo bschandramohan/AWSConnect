@@ -71,13 +71,16 @@ suspend inline fun <reified T: Any> postFlowResult(uriParam: String, dataToPost:
 suspend inline fun <reified T : Any> getFlowResult(uriParam: String): T? = client
     .get()
     .uri(uriParam)
-    .accept(MediaType.APPLICATION_JSON)
+    .accept(MediaType.APPLICATION_NDJSON)
     .retrieve()
     .onStatus(HttpStatus::isError, ::renderErrorResponse)
     .bodyToFlow<T>()
     .firstOrNull()
 
-inline fun <reified T : Any> getFlowResults(uriParam: String): List<T?> = runBlocking {
+inline fun <reified T : Any> getFlowResults(
+    uriParam: String,
+    mediaType: MediaType = MediaType.APPLICATION_NDJSON
+): List<T?> = runBlocking {
     val itemList = mutableListOf<T>()
     // Commented code with prints to show that the actual service call is made only at collect() and not at retrieve or bodyToFlow steps
 //    client
@@ -97,11 +100,41 @@ inline fun <reified T : Any> getFlowResults(uriParam: String): List<T?> = runBlo
     client
         .get()
         .uri(uriParam)
-        .accept(MediaType.APPLICATION_JSON)
+        .accept(mediaType)
         .retrieve()
         .onStatus(HttpStatus::isError, ::renderErrorResponse)
         .bodyToFlow<T>()
         .collect { item -> itemList.add(item) }
+
+    return@runBlocking itemList
+}
+
+
+inline fun <reified T : Any> getFlowStream(uriParam: String): List<T?> = runBlocking {
+    val itemList = mutableListOf<T>()
+    // Commented code with prints to show that the actual service call is made only at collect() and not at retrieve or bodyToFlow steps
+//    client
+//        .get()
+//        .uri(uriParam)
+//        .accept(MediaType.APPLICATION_JSON)
+//        .also { logger.info("Before retrieving") }
+//        .retrieve()
+//        .also { logger.info("After retrieving") }
+//        .onStatus(HttpStatus::isError, ::renderErrorResponse)
+//        .also { logger.info("before bodyToFlow conversion") }
+//        .bodyToFlow<T>()
+//        .also { logger.info("After bodyToFlow conversion") }
+//        .collect { item -> itemList.add(item)}
+//        .also { logger.info("After collection") }
+
+    client
+        .get()
+        .uri(uriParam)
+        .accept(MediaType.APPLICATION_NDJSON)
+        .retrieve()
+        .onStatus(HttpStatus::isError, ::renderErrorResponse)
+        .bodyToFlow<T>()
+        .collect { item -> itemList.add(item).also { logger.info("Fetched item=$item") } }
 
     return@runBlocking itemList
 }

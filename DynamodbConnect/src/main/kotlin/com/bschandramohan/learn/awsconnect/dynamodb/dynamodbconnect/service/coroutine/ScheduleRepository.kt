@@ -2,8 +2,10 @@ package com.bschandramohan.learn.awsconnect.dynamodb.dynamodbconnect.service.cor
 
 import com.bschandramohan.learn.awsconnect.dynamodb.dynamodbconnect.aop.TimeIt
 import com.bschandramohan.learn.awsconnect.dynamodb.dynamodbconnect.domain.Schedule
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.reactive.asFlow
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Repository
@@ -53,7 +55,10 @@ class ScheduleRepository(dynamoClient: DynamoDbEnhancedAsyncClient) {
         // Test code to print the items
         // scanResults.items().subscribe { item -> logger.info("Inside repository; $item") }
 
+        // Delay of 100 is just to demonstrate the streaming results being consumed.
+        // Use: http --stream http://localhost:8080/flow/schedule/stream to test
         return scanResults.items().asFlow()
+            .onEach { delay(100) }
     }
 
     companion object {
