@@ -3,6 +3,7 @@ package com.bschandramohan.learn.awsconnect.dynamodb.dynamodbconnect.service.cor
 import com.bschandramohan.learn.awsconnect.dynamodb.dynamodbconnect.aop.TimeIt
 import com.bschandramohan.learn.awsconnect.dynamodb.dynamodbconnect.domain.Schedule
 import com.bschandramohan.learn.awsconnect.dynamodb.dynamodbconnect.error.ApiServerError
+import kotlinx.coroutines.flow.collect
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -34,10 +35,32 @@ class ScheduleApi(var scheduleService: ScheduleService) {
     }
 
     @TimeIt
+    @GetMapping("/")
+    suspend fun getAll(): ResponseEntity<Any> {
+        return try {
+            val schedulesList = mutableListOf<Schedule>()
+
+            val schedulesListFlow = scheduleService.getAll()
+            schedulesListFlow.collect { item -> schedulesList.add(item) }
+            // Test code to print the list
+            //schedulesList.forEach(::println)
+            schedulesList.forEach { logger.info(it.toString()) }
+
+            ResponseEntity.ok(schedulesList)
+        } catch (e: Exception) {
+            ApiServerError(entityName, "getAll", e)
+        }
+    }
+
+    @TimeIt
     @GetMapping("/{id}")
     suspend fun get(@PathVariable id: Long): ResponseEntity<Any> {
         return try {
             val schedule = scheduleService.get(id)
+
+            // Test code to print the list
+            // schedule.collect { item -> logger.info("item=$item") }
+
             ResponseEntity.ok(schedule)
         } catch (e: Exception) {
             logger.error("Error getting schedule", e)

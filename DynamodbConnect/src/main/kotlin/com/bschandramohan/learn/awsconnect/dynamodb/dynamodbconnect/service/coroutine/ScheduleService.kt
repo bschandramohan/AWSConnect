@@ -6,5 +6,6 @@ import org.springframework.stereotype.Service
 @Service("ScheduleFlowService")
 class ScheduleService(var scheduleRepository: ScheduleRepository) {
     suspend fun get(userId: Long) = scheduleRepository.get(userId)
+    suspend fun getAll() = scheduleRepository.getAll()
     suspend fun save(schedule: Schedule) = scheduleRepository.save(schedule)
 }
