@@ -60,7 +60,7 @@ class ScheduleFlowTest {
     }
 
     @Test
-    fun getAllNew() = runBlocking {
+    fun getAllList() = runBlocking {
         val addSchedule = sampleSchedule()
         val createResponse = postFlowResult("flow/schedule/", addSchedule)
         require(createResponse == null) { "Saving schedule shouldn't return an object" }
