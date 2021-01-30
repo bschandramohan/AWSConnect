@@ -31,6 +31,7 @@ class ScheduleRepository(dynamoClient: DynamoDbEnhancedAsyncClient) {
         val key = Key.builder().partitionValue(userId).build()
         val itemFuture = table.getItem(key)
         return flow {
+            // itemFuture.get() makes sure the call wait till the save is complete. It doesn't return any status
             emit(itemFuture.get())
         }
 
