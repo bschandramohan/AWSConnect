@@ -16,12 +16,14 @@ aws dynamodb --endpoint-url http://localhost:8000 create-table \
 --provisioned-throughput ReadCapacityUnits=1,WriteCapacityUnits=1
 ```
 
-3. Run the Async and Sync tests to test the functionality
+3. Run the Sync, Async and Flow tests to test the functionality
 
 # Notes
 
-There are two packages : Async and Sync indicating the two mechanisms
+There are three packages : Sync, Async and Flow indicating the three mechanisms
 
-- Async uses Dynamodb Enhanced Async client - so responses are obtained in async mode.
 - Sync uses Dynamodb Enhanced client - so responses are obtained synchronously.
-- Enhanced: for directly mapping the results into kotlin objects instead of json response to be parsed manually.
+- Async uses Dynamodb Enhanced Async client - so responses are obtained in async mode.
+- Flow: uses Dynamodb Enhanced Async client - but converts the results to Kotlin flow for consumption
+
+Enhanced library: for directly mapping the results into kotlin objects instead of json response to be parsed manually.
