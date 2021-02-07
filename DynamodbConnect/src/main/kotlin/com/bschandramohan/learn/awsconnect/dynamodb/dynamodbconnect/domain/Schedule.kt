@@ -3,6 +3,7 @@ package com.bschandramohan.learn.awsconnect.dynamodb.dynamodbconnect.domain
 import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbBean
 import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbPartitionKey
 
+// TODO: Changing String to java.time.DayOfWeek enum for the map
 @DynamoDbBean
 data class Schedule(
     @get:DynamoDbPartitionKey
