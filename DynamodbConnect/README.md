@@ -1,3 +1,5 @@
+Spring Boot Reactive Data webapplication that demonstrates reactive way of connecting to database (AWS DynamoDB in this case)  
+
 # Pre Run Steps
 
 Before running the spring app, do the following
