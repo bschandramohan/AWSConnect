@@ -9,7 +9,7 @@ import software.amazon.awssdk.services.dynamodb.DynamoDbClient
 import java.net.URI
 
 @Configuration
-class DynamodClientSyncConfig(val dynamoConfigProperties: DynamoConfigProperties) {
+class DynamodbClientSyncConfig(val dynamoConfigProperties: DynamoConfigProperties) {
     @Bean
     fun dynamoDbSyncClient(): DynamoDbClient = DynamoDbClient.builder()
         .region(Region.of(dynamoConfigProperties.region))
